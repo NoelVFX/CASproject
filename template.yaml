@@ -1,143 +1,151 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: >
-  python3.10
+ python3.10
 
-  Sample SAM Template for CASproject
+
+ Sample SAM Template for CASproject
+
 
 Globals:
-  Function:
-    Timeout: 100
-    LoggingConfig:
-      LogFormat: JSON
-    Environment:
-      Variables:
-      
+ Function:
+   Timeout: 100
+   LoggingConfig:
+     LogFormat: JSON
+   Environment:
+     Variables:
+
 
 Resources:
-  CASprojectApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      Name: CASproject
-      StageName: Prod
-      DefinitionBody:
-        openapi: 3.0.1
-        info:
-          title: CASproject API
-          version: '1.0'
-        paths:
-          /hello:
-            post:
-              parameters:
-                - name: x-signature-ed25519
-                  in: header
-                  required: true
-                  schema:
-                    type: string
-                - name: x-signature-timestamp
-                  in: header
-                  required: true
-                  schema:
-                    type: string
-              responses:
-                '200':
-                  description: Successful Response
-              x-amazon-apigateway-integration:
-                type: aws_proxy
-                httpMethod: POST
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HelloWorldFunction.Arn}/invocations
-                credentials: !GetAtt ApiGatewayRole.Arn
+ CASprojectApi:
+   Type: AWS::Serverless::Api
+   Properties:
+     Name: CASproject
+     StageName: Prod
+     DefinitionBody:
+       openapi: 3.0.1
+       info:
+         title: CASproject API
+         version: '1.0'
+       paths:
+         /hello:
+           post:
+             parameters:
+               - name: x-signature-ed25519
+                 in: header
+                 required: true
+                 schema:
+                   type: string
+               - name: x-signature-timestamp
+                 in: header
+                 required: true
+                 schema:
+                   type: string
+             responses:
+               '200':
+                 description: Successful Response
+             x-amazon-apigateway-integration:
+               type: aws_proxy
+               httpMethod: POST
+               uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HelloWorldFunction.Arn}/invocations
+               credentials: !GetAtt ApiGatewayRole.Arn
 
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      PackageType: Image
-      ImageUri: 110399421952.dkr.ecr.us-east-1.amazonaws.com/casproject:latest
-      Architectures:
-        - x86_64
-      Events:
-        HelloWorld:
-          Type: Api
-          Properties:
-            RestApiId: !Ref CASprojectApi
-            Path: /hello
-            Method: post
-      Role: !GetAtt LambdaExecutionRole.Arn
-    Metadata:
-      Dockerfile: Dockerfile
-      DockerContext: ./hello_world
-      DockerTag: python3.10-v1
 
-  LambdaExecutionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: LambdaExecutionPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: arn:aws:logs:*:*:*
-              - Effect: Allow
-                Action:
-                  - dynamodb:Scan
-                  - dynamodb:Query
-                  - dynamodb:GetItem
-                  - dynamodb:PutItem
-                  - dynamodb:UpdateItem
-                  - dynamodb:DeleteItem
-                Resource: arn:aws:dynamodb:*:*:table/Users
+ HelloWorldFunction:
+   Type: AWS::Serverless::Function
+   Properties:
+     PackageType: Image
+     ImageUri: 110399421952.dkr.ecr.us-east-1.amazonaws.com/casproject:latest
+     Architectures:
+       - x86_64
+     Events:
+       HelloWorld:
+         Type: Api
+         Properties:
+           RestApiId: !Ref CASprojectApi
+           Path: /hello
+           Method: post
+     Role: !GetAtt LambdaExecutionRole.Arn
+   Metadata:
+     Dockerfile: Dockerfile
+     DockerContext: ./hello_world
+     DockerTag: python3.10-v1
 
-  ApiGatewayRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: apigateway.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: ApiGatewayInvokeLambdaPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action: lambda:InvokeFunction
-                Resource: !GetAtt HelloWorldFunction.Arn
 
-  ApplicationResourceGroup:
-    Type: AWS::ResourceGroups::Group
-    Properties:
-      Name: !Sub ApplicationInsights-SAM-${AWS::StackName}
-      ResourceQuery:
-        Type: CLOUDFORMATION_STACK_1_0
+ LambdaExecutionRole:
+   Type: AWS::IAM::Role
+   Properties:
+     AssumeRolePolicyDocument:
+       Version: '2012-10-17'
+       Statement:
+         - Effect: Allow
+           Principal:
+             Service: lambda.amazonaws.com
+           Action: sts:AssumeRole
+     Policies:
+       - PolicyName: LambdaExecutionPolicy
+         PolicyDocument:
+           Version: '2012-10-17'
+           Statement:
+             - Effect: Allow
+               Action:
+                 - logs:CreateLogGroup
+                 - logs:CreateLogStream
+                 - logs:PutLogEvents
+               Resource: arn:aws:logs:*:*:*
+             - Effect: Allow
+               Action:
+                 - dynamodb:Scan
+                 - dynamodb:Query
+                 - dynamodb:GetItem
+                 - dynamodb:PutItem
+                 - dynamodb:UpdateItem
+                 - dynamodb:DeleteItem
+               Resource: arn:aws:dynamodb:*:*:table/Users
 
-  ApplicationInsightsMonitoring:
-    Type: AWS::ApplicationInsights::Application
-    Properties:
-      ResourceGroupName: !Ref ApplicationResourceGroup
-      AutoConfigurationEnabled: 'true'
+
+ ApiGatewayRole:
+   Type: AWS::IAM::Role
+   Properties:
+     AssumeRolePolicyDocument:
+       Version: '2012-10-17'
+       Statement:
+         - Effect: Allow
+           Principal:
+             Service: apigateway.amazonaws.com
+           Action: sts:AssumeRole
+     Policies:
+       - PolicyName: ApiGatewayInvokeLambdaPolicy
+         PolicyDocument:
+           Version: '2012-10-17'
+           Statement:
+             - Effect: Allow
+               Action: lambda:InvokeFunction
+               Resource: !GetAtt HelloWorldFunction.Arn
+
+
+ ApplicationResourceGroup:
+   Type: AWS::ResourceGroups::Group
+   Properties:
+     Name: !Sub ApplicationInsights-SAM-${AWS::StackName}
+     ResourceQuery:
+       Type: CLOUDFORMATION_STACK_1_0
+
+
+ ApplicationInsightsMonitoring:
+   Type: AWS::ApplicationInsights::Application
+   Properties:
+     ResourceGroupName: !Ref ApplicationResourceGroup
+     AutoConfigurationEnabled: 'true'
+
 
 Outputs:
-  HelloWorldApiUrl:
-    Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value: !Sub "https://${CASprojectApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunctionArn:
-    Description: Hello World Lambda Function ARN
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
-    Value: !GetAtt LambdaExecutionRole.Arn
+ HelloWorldApiUrl:
+   Description: API Gateway endpoint URL for Prod stage for Hello World function
+   Value: !Sub "https://${CASprojectApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+ HelloWorldFunctionArn:
+   Description: Hello World Lambda Function ARN
+   Value: !GetAtt HelloWorldFunction.Arn
+ HelloWorldFunctionIamRole:
+   Description: Implicit IAM Role created for Hello World function
+   Value: !GetAtt LambdaExecutionRole.Arn

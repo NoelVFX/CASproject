@@ -12,12 +12,7 @@ Globals:
       LogFormat: JSON
     Environment:
       Variables:
-        DISCORD_PUBLIC_KEY: a42ee6c7cecdbeb44c3b3b74608348bf879b55506897fbf5ae9c20b20878d011
-        BOT_TOKEN: MTI0Nzg2ODE2MjI4NDk3ODI2Ng.GZZuU7.2ZlopYtcl_Nz0rZrnQyxMgJY0e2D7UXOrGfNqM
-        APPLICATION_ID: 1247868162284978266
-        DYNAMODB_TABLE_NAME: 'Users'
-        # API_KEY: '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'
-        API_KEY: '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'
+      
 
 Resources:
   CASprojectApi:

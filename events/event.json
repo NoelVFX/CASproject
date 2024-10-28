@@ -1,0 +1,65 @@
+{
+  "body": "{\"message\": \"hello world\"}",
+  "resource": "/hello",
+  "path": "/hello",
+  "httpMethod": "GET",
+  "isBase64Encoded": false,
+  "queryStringParameters": {
+      "foo": "bar"
+  },
+  "pathParameters": {
+      "proxy": "/path/to/resource"
+  },
+  "stageVariables": {
+      "baz": "qux"
+  },
+  "headers": {
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept-Encoding": "gzip, deflate, sdch",
+      "Accept-Language": "en-US,en;q=0.8",
+      "Cache-Control": "max-age=0",
+      "CloudFront-Forwarded-Proto": "https",
+      "CloudFront-Is-Desktop-Viewer": "true",
+      "CloudFront-Is-Mobile-Viewer": "false",
+      "CloudFront-Is-SmartTV-Viewer": "false",
+      "CloudFront-Is-Tablet-Viewer": "false",
+      "CloudFront-Viewer-Country": "US",
+      "Host": "1234567890.execute-api.us-east-1.amazonaws.com",
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent": "Custom User Agent String",
+      "Via": "1.1 08f323deadbeefa7af34d5feb414ce27.cloudfront.net (CloudFront)",
+      "X-Amz-Cf-Id": "cDehVQoZnx43VYQb9j2-nvCh-9z396Uhbp027Y2JvkCPNLmGJHqlaA==",
+      "X-Forwarded-For": "127.0.0.1, 127.0.0.2",
+      "X-Forwarded-Port": "443",
+      "X-Forwarded-Proto": "https",
+      "x-signature-ed25519": "11eca561f781fba938734cc9d9256d706b51d90e59a3abf99f99fd873f0ccb30a0ad73de57d600341e689d6a894e8c8aa13a1e85deadd7ea6b4a3b08c8b49b02",
+      "x-signature-timestamp": "1721998263"
+  },
+  "requestContext": {
+      "accountId": "123456789012",
+      "resourceId": "123456",
+      "stage": "prod",
+      "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
+      "requestTime": "09/Apr/2015:12:34:56 +0000",
+      "requestTimeEpoch": 1428582896000,
+      "identity": {
+          "cognitoIdentityPoolId": null,
+          "accountId": null,
+          "cognitoIdentityId": null,
+          "caller": null,
+          "accessKey": null,
+          "sourceIp": "127.0.0.1",
+          "cognitoAuthenticationType": null,
+          "cognitoAuthenticationProvider": null,
+          "userArn": null,
+          "userAgent": "Custom User Agent String",
+          "user": null
+      },
+      "path": "/prod/hello",
+      "resourcePath": "/hello",
+      "httpMethod": "POST",
+      "apiId": "1234567890",
+      "protocol": "HTTP/1.1"
+  }
+}
+  
